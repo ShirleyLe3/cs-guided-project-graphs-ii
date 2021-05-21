@@ -35,9 +35,7 @@ Notes:
 `0 <= sc < image[0].length`.
 - The value of each color in `image[i][j]` and `newColor` will be an integer in
 `[0, 65535]`.
-"""
-def flood_fill(image, sr, sc, new_color):
-    """
+
     Inputs:
     image -> List[List[int]]
     sr -> int
@@ -47,5 +45,130 @@ def flood_fill(image, sr, sc, new_color):
     Output:
     List[List[int]]
     """
-    # Your code here
 
+
+def flood_fill(image, sr, sc, new_color):
+    current_color = image[sr][sc]
+    # Traverse!
+    queue = []
+    visited = set()
+    queue.append((sr, sc))
+
+
+​
+ while len(queue) > 0:
+      # pop the item off the queue
+      current_vertex = queue.pop(0)
+       # check if vertex was visited
+       if current_vertex in visited:
+            continue
+
+        visited.add(current_vertex)
+        # update the pixel to the new color
+        image[current_vertex[0]][current_vertex[1]] = new_color
+​
+     # Queue up the neighbors:
+ row = current_vertex[0]
+  col = current_vertex[1]
+   neighbors = []
+    if row - 1 >= 0 and image[row-1][col] == current_color:
+         # look UP
+        neighbors.append((row - 1, col))
+    if row + 1 < len(image) and image[row+1][col] == current_color:
+        # look down
+        neighbors.append((row + 1, col))
+    if col - 1 >= 0 and image[row][col-1] == current_color:
+        # look left
+        neighbors.append((row, col - 1))
+    if col + 1 < len(image[row]) and image[row][col+1] == current_color:
+        # look right
+        neighbors.append((row, col + 1))
+​
+ for neighbor in neighbors:
+      queue.append(neighbor)
+​
+​
+​
+image = [
+    [1, 1, 1],
+    [1, 1, 0],
+    [1, 0, 1]
+]
+​
+flood_fill(image, 1, 1, 2)
+​
+for i in image:
+    print(i)
+
+
+"""________________________________________________________________________________________________
+                        UNDERSTANDING:
+______Problem______
+-drop color
+-begins to propogate
+-each node propogates
+
+-fill neighbors to change value (coordinate increment)
+            -neighbors with same value
+
+
+"start-end"  =  traverse =  graph
+
+
+
+
+
+
+
+_____Map/Chart/Graph______
+build graph
+
+vertex =  pixels
+edge =   neighbors (with equal value)
+
+
+
+
+
+________Tools________
+-representation                 Matrix  (vertex = pixels)    
+                                    (pixel = coordinate)    
+                    
+-data structure                 Stack
+-search/Traversal algorithm     DFS (queue) a number with vertex(row, column)
+                                        (memorize queue structure)
+
+______Structure/Plan________
+Build Graph
+-
+-
+-
+-
+
+Traverse it
+-traverse (define traversal, visited, addVertexOrder FIFO)
+-queue
+-pop item off queue
+- check if vertex was visisted
+- do something to vertex    (update pixel color)   ()
+- queue up the neighbors:   
+            define,  vertex, edges/neighbor,  
+            update   vertex  (if/else)       
+                     next/neighbor  (must define current color)
+                                    (up, down, left, right   =  matrix)       increment coordinates
+- loop append(neighbor)/next
+- return None   (or image)
+
+ 
+
+
+
+__________________________________________________________________________________________________ 
+                        PSUEDO CODE:
+.                        
+
+
+
+
+
+"""
