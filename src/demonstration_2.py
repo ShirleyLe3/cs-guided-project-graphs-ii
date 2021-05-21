@@ -1,72 +1,302 @@
+# --------------------------------------------------------------------
+#                       Adjacent Matrix
+# ____________________________________________________________________
+
 """
-In a town, there are `N` people labelled from `1` to `N`.  There is a rumor
-that one of these people is secretly the town judge.
+An `image` is represented by a 2-D array of integers, each integer representing
+the pixel value of the image (from 0 to 65535).
 
-If the town judge exists, then:
+Given a coordinate `(sr, sc)` representing the starting pixel (row and column)
+of the flood fill, and a pixel value `newColor`, "flood fill" the image.
 
-1. The town judge trusts nobody.
-2. Everybody (except for the town judge) trusts the town judge.
-3. There is exactly one person that satisfies properties 1 and 2.
+To perform a "flood fill", consider the starting pixel, plus any pixels
+connected 4-directionally to the starting pixel of the same color as the
+starting pixel, plus any pixels connected 4-directionally to those pixels (also
+with the same color as the starting pixel), and so on. Replace the color of all
+of the aforementioned pixels with the newColor.
 
-You are given `trust`, an array of pairs `trust[i] = [a, b]` representing that
-the person labelled a trusts the person labelled `b`.
-
-If the town judge exists and can be identified, return the label of the town
-judge.  Otherwise, return `-1`.
+At the end, return the modified image.
 
 Example 1:
 
 ```plaintext
-Input: N = 2, trust = [[1,2]]
-Output: 2
+Input:
+image = [[1,1,1],[1,1,0],[1,0,1]]
+sr = 1, sc = 1, newColor = 2
+Output: [[2,2,2],[2,2,0],[2,0,1]]
+Explanation:
+From the center of the image (with position (sr, sc) = (1, 1)), all pixels
+connected by a path of the same color as the starting pixel are colored with
+the new color.
+Note the bottom corner is not colored 2, because it is not 4-directionally
+connected to the starting pixel.
 ```
 
-Example 2:
+Notes:
 
-```plaintext
-Input: N = 3, trust = [[1,3],[2,3]]
-Output: 3
-```
+- The length of `image` and `image[0]` will be in the range `[1, 50]`.
+- The given starting pixel will satisfy `0 <= sr < image.length` and
+`0 <= sc < image[0].length`.
+- The value of each color in `image[i][j]` and `newColor` will be an integer in
+`[0, 65535]`.
 
-Example 3:
+    Inputs:
+    image -> List[List[int]]
+    sr -> int
+    sc -> int
+    new_color -> int
 
-```plaintext
-Input: N = 3, trust = [[1,3],[2,3],[3,1]]
-Output: -1
-```
+    Output:
+    List[List[int]]
+    """
 
-Example 4:
 
-```plaintext
-Input: N = 3, trust = [[1,2],[2,3]]
-Output: -1
-```
+def flood_fill(image, sr, sc, new_color):
+    current_color = image[sr][sc]
+    # Traverse!
+    queue = []
+    visited = set()
+    queue.append((sr, sc))
 
-Example 5:
 
-```plaintext
-Input: N = 4, trust = [[1,3],[1,4],[2,3],[2,4],[4,3]]
-Output: 3
-```
+​
+ while len(queue) > 0:
+      # pop the item off the queue
+      current_vertex = queue.pop(0)
+       # check if vertex was visited
+       if current_vertex in visited:
+            continue
 
-Constraints:
+        visited.add(current_vertex)
+        # update the pixel to the new color
+        image[current_vertex[0]][current_vertex[1]] = new_color
+​
+     # Queue up the neighbors:
+ row = current_vertex[0]
+  col = current_vertex[1]
+   neighbors = []
+    if row - 1 >= 0 and image[row-1][col] == current_color:
+         # look UP
+        neighbors.append((row - 1, col))
+    if row + 1 < len(image) and image[row+1][col] == current_color:
+        # look down
+        neighbors.append((row + 1, col))
+    if col - 1 >= 0 and image[row][col-1] == current_color:
+        # look left
+        neighbors.append((row, col - 1))
+    if col + 1 < len(image[row]) and image[row][col+1] == current_color:
+        # look right
+        neighbors.append((row, col + 1))
+​
+ for neighbor in neighbors:
+      queue.append(neighbor)
+​
+​
+​
+image = [
+    [1, 1, 1],
+    [1, 1, 0],
+    [1, 0, 1]
+]
+​
+flood_fill(image, 1, 1, 2)
+​
+for i in image:
+    print(i)
 
-- `1 <= N <= 1000`
-- `0 <= trust.length <= 10^4`
-- `trust[i].length == 2`
-- `trust[i]` are all different
-- `trust[i][0] != trust[i][1]`
-- `1 <= trust[i][0], trust[i][1] <= N`
+
+"""________________________________________________________________________________________________
+                        UNDERSTANDING:
+___________________________________________________________________________________________________
+______Problem______
+-drop color
+-begins to propogate
+-each node propogates
+
+-fill neighbors to change value (coordinate increment)
+            -neighbors with same value
+
+
+"start-end"  =  traverse =  graph
+
+
+
+
+
+
+
+_____Map/Chart/Graph______
+build graph
+
+vertex =  pixels
+edge =   neighbors (with equal value)
+
+
+
+
+
+________Tools________
+-representation                 Matrix  (vertex = pixels)    
+                                    (pixel = coordinate)    
+                    
+-data structure                 Stack
+-search/Traversal algorithm     DFS (queue) a number with vertex(row, column)
+                                        (memorize queue structure)
+
+______Structure/Plan________
+Build Graph
+-
+-
+-
+-
+
+Traverse it
+-traverse (define traversal, visited, addVertexOrder FIFO)
+-queue
+-pop item off queue
+- check if vertex was visisted
+- do something to vertex    (update pixel color)   ()
+- queue up the neighbors:   
+            define,  vertex, edges/neighbor,  
+            update   vertex  (if/else)       
+                     next/neighbor  (must define current color)
+                                    (up, down, left, right   =  matrix)       increment coordinates
+- loop append(neighbor)/next
+- return None   (or image)
+
+ 
+
+
+
+__________________________________________________________________________________________________ 
+                        PSUEDO CODE:
+__________________________________________________________________________________________________                        
+
+
+
+
+
+"""
+# ________________________________________________________________________________________________________
+#                                       Matrix #2
+# ________________________________________________________________________________________________________
+
+"""__________________________________________________________________________________________________
+                        UNDERSTAND:
+__________________________________________________________________________________________________
+
+______Problem______
+- WHAT | parameters? `print(function(testInputs)) `
+- HOW | function | action | linear/graph/order
+- WHERE| constraints (for:) (while)
+- WHEN | constraints (if/else)
+- WHY | are variables unique
+- WHAT | edge cases
+
+
+
+Keywords:
+
+
+
+
+
+_____Chart/Graph/Map______
+DataStruct/Dimension
+Vertex =                          (unique)
+Edge =                      .     (connection/flow)
+
+
+________Tool/Method________
+- Representation
+  - [-] Flow (linear | graph)
+  - [-] Direction (uni-direction | bidirectional)
+  - [-] Cycle (acyclical | cyclical)
+  - [x] List
+  - [x] Matrix
+- Data Structure
+  - [x] Binary
+  - [x] LinkedList
+  - [x] Stack
+  - [x] Queue
+- Iteration
+  - [x] Traverse | Search
+  - [x] Depth | Breadth (sorted)
+
+
+______Structure Code________
+Build Graph
+- [Step1]
+  - .
+  - .
+  - .
+
+Iterate & update
+- [Step1]
+  - .
+  - .
+  - .
+- [Step2]
+  - .
+  - .
+  - .
+  - .
+    - .
+      - .
+  - .
+  - .
+  - .
+- [Step3]
+
+
+
+
+__________________________________________________________________________________________________
+                        PSUEDO CODE:
+__________________________________________________________________________________________________
+______Structure________
+Build Graph
+- [Step1]
+  - .
+  - .
+  - .
+
+Iterate & update
+- [Step1]
+  - .
+  - .
+  - .
+- [Step2]
+  - .
+  - .
+  - .
+  - .
+    - .
+      - .
+  - .
+  - .
+  - .
+- [Step3]
+
 """
 
 
-def find_judge(N, trust):
-    """
-    Inputs:
-    N -> int
-    trust -> List[List[int]]
 
-    Output:
-    int
-    """
-    # Your code here
+def get______(self):
+    return self.vertices[v1].add_connection(self.vertices[v2], weight)
+
+
+def get_vertices(self):
+    return self.vertices.keys()
+
+def breadth_first_search(self, starting_vert):
+    to_visit = Queue()
+    visited = set()
+    to_visit.enqueue(starting_vert)
+    visited.add(starting_vert)
+    while to_visit.size() > 0:
+        current_vert = to_visit.dequeue()
+        for next_vert in current_vert.get_connections():
+            if next_vert not in visited:
+                visited.add(next_vert)
+
