@@ -58,6 +58,8 @@ Constraints:
 - `trust[i][0] != trust[i][1]`
 - `1 <= trust[i][0], trust[i][1] <= N`
 """
+
+
 def find_judge(N, trust):
     """
     Inputs:
@@ -68,4 +70,3 @@ def find_judge(N, trust):
     int
     """
     # Your code here
-
